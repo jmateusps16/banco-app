@@ -28,9 +28,10 @@
 
 15. [ ] Na classe MainActivity, mostrar o valor total de dinheiro armazenado no banco na tela principal. Este valor deve ser a soma de todos os saldos das contas armazenadas no banco de dados.
 
-(Daqui em diante - Opcional)
-Opcional 1. [ ] Incluir as telas para gerenciamento de Clientes e ajustar implementação do BD para refletir relacionamento em que toda Conta tem 1 Cliente, mas 1 Cliente pode ter mais de 1 Conta - neste caso, ao adicionar uma conta tem que verificar se o Cliente é válido (se é um Cliente já existente no banco);
+### Opcional
 
-Opcional 2. [ ] Extrair as strings e traduzir a aplicação para outra língua;
+16. [ ] - (Opcional) Incluir as telas para gerenciamento de Clientes e ajustar implementação do BD para refletir relacionamento em que toda Conta tem 1 Cliente, mas 1 Cliente pode ter mais de 1 Conta - neste caso, ao adicionar uma conta tem que verificar se o Cliente é válido (se é um Cliente já existente no banco);
 
-Opcional 3. [ ] Fazer melhorias de UI na aplicação.
+17. [ ] - (Opcional) Extrair as strings e traduzir a aplicação para outra língua;
+
+18. [ ] - (Opcional) Fazer melhorias de UI na aplicação.
