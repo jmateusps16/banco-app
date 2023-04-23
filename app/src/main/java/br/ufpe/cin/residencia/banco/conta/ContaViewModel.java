@@ -41,4 +41,9 @@ public class ContaViewModel extends AndroidViewModel {
     void buscarPeloNumero(String numeroConta) {
         //TODO implementar
     }
+
+    public LiveData<List<Conta>> getContas() {
+        return contas;
+    }
+
 }

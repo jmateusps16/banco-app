@@ -1,6 +1,7 @@
 package br.ufpe.cin.residencia.banco.conta;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.widget.Button;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import br.ufpe.cin.residencia.banco.R;
 
@@ -17,12 +19,14 @@ import br.ufpe.cin.residencia.banco.R;
 public class ContasActivity extends AppCompatActivity {
     ContaAdapter adapter;
     ContaViewModel viewModel;
+    private LiveData<List<Conta>> contas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contas);
         viewModel = new ViewModelProvider(this).get(ContaViewModel.class);
+        contas = viewModel.getContas();
         RecyclerView recyclerView = findViewById(R.id.rvContas);
         adapter = new ContaAdapter(getLayoutInflater());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
