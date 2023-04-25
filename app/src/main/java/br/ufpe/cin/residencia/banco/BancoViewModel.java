@@ -7,9 +7,12 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import br.ufpe.cin.residencia.banco.conta.Conta;
 import br.ufpe.cin.residencia.banco.conta.ContaRepository;
@@ -26,28 +29,29 @@ public class BancoViewModel extends AndroidViewModel {
     }
 
     void transferir(String numeroContaOrigem, String numeroContaDestino, double valor) {
-        LiveData<Conta> contaLiveDataOrigem = this.contaRepository.buscarPeloNumero(numeroContaOrigem);
-        Conta contaOrigem = contaLiveDataOrigem.getValue();
-        LiveData<Conta> contaLiveDataDestino = this.contaRepository.buscarPeloNumero(numeroContaDestino);
-        Conta contaDestino = contaLiveDataDestino.getValue();
+        Executor executor = Executors.newSingleThreadExecutor();
 
-        if (contaOrigem == null) {
-            throw new RuntimeException("Conta de origem não encontrada.");
-        }
+        executor.execute(() -> {
+            Conta contaOrigem = contaRepository.buscarPeloNumeroSync(numeroContaOrigem);
+            if (contaOrigem == null) {
+                throw new RuntimeException("Conta de origem não encontrada.");
+            }
 
-        if (contaDestino == null) {
-            throw new RuntimeException("Conta de destino não encontrada.");
-        }
+            if (contaOrigem.getSaldo() < valor) {
+                throw new RuntimeException("Saldo insuficiente na conta de origem.");
+            }
 
-        if (contaOrigem.getSaldo() < valor) {
-            throw new RuntimeException("Saldo insuficiente na conta de origem.");
-        }
+            contaOrigem.debitar(valor);
+            contaRepository.atualizar(contaOrigem);
 
-        contaOrigem.debitar(valor);
-        contaDestino.creditar(valor);
+            Conta contaDestino = contaRepository.buscarPeloNumeroSync(numeroContaDestino);
+            if (contaDestino == null) {
+                throw new RuntimeException("Conta de destino não encontrada.");
+            }
 
-        this.contaRepository.atualizar(contaOrigem);
-        this.contaRepository.atualizar(contaDestino);
+            contaDestino.creditar(valor);
+            contaRepository.atualizar(contaDestino);
+        });
     }
 
     void creditar(String numeroConta, double valor) {

@@ -2,6 +2,8 @@ package br.ufpe.cin.residencia.banco.conta;
 
 import androidx.annotation.WorkerThread;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 
 import java.util.List;
 
@@ -54,8 +56,21 @@ public class ContaRepository {
         return contas;
     }
 
-    @WorkerThread
+    //@WorkerThread
     public LiveData<Conta> buscarPeloNumero(String numeroConta) {
-        return dao.buscarPorNumero(numeroConta);
+        return Transformations.switchMap(dao.buscarPorNumero(numeroConta), conta -> {
+            if (conta == null) {
+                return null;
+            } else {
+                MutableLiveData<Conta> contaLiveData = new MutableLiveData<>();
+                contaLiveData.setValue(conta);
+                return contaLiveData;
+            }
+        });
     }
+
+    public Conta buscarPeloNumeroSync(String numeroConta) {
+        return dao.buscarPeloNumeroSync(numeroConta);
+    }
+
 }

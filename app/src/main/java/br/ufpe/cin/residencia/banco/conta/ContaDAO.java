@@ -19,6 +19,9 @@ public interface ContaDAO {
     @Query("SELECT * FROM contas WHERE numero = :numeroConta")
     LiveData<Conta> buscarPorNumero(String numeroConta);
 
+    @Query("SELECT * FROM contas WHERE numero = :numeroConta")
+    Conta buscarPeloNumeroSync(String numeroConta);
+
     @Query("SELECT * FROM contas WHERE nomeCliente LIKE '%' || :nomeDoCliente || '%' ORDER BY numero ASC")
     LiveData<List<Conta>> buscarPorNomeCliente(String nomeDoCliente);
 
