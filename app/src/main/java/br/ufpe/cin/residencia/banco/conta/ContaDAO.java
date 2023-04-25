@@ -37,6 +37,18 @@ public interface ContaDAO {
     @Delete
     void remover(Conta conta);
 
+    @Query("SELECT SUM(saldo) FROM contas")
+    LiveData<Double> getTotalDinheiro();
+
+    @Query("SELECT * FROM contas WHERE numero = :numeroConta")
+    LiveData<Conta> buscarConta(String numeroConta);
+
+    @Query("SELECT * FROM contas WHERE nomeCliente LIKE '%' || :nomeDoCliente || '%' ORDER BY numero ASC")
+    LiveData<List<Conta>> buscarContasPorNomeCliente(String nomeDoCliente);
+
+    @Query("SELECT * FROM contas WHERE cpfCliente = :cpfDoCliente ORDER BY numero ASC")
+    LiveData<List<Conta>> buscarContasPorCPFCliente(String cpfDoCliente);
+
 }
 //Ver anotações TODO no código
 //TODO incluir métodos para atualizar conta e remover conta

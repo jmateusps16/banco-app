@@ -16,35 +16,83 @@ import br.ufpe.cin.residencia.banco.conta.ContaRepository;
 
 //Ver anotações TODO no código
 public class BancoViewModel extends AndroidViewModel {
-    private ContaRepository repository;
+    private ContaRepository contaRepository;
+    private LiveData<Double> totalDinheiroBanco;
 
     public BancoViewModel(@NonNull Application application) {
         super(application);
-        this.repository = new ContaRepository(BancoDB.getDB(application).contaDAO());
+        this.contaRepository = new ContaRepository(BancoDB.getDB(application).contaDAO());
+        this.totalDinheiroBanco = this.contaRepository.getTotalDinheiroBanco();
     }
 
     void transferir(String numeroContaOrigem, String numeroContaDestino, double valor) {
-        //TODO implementar transferência entre contas (lembrar de salvar no BD os objetos Conta modificados)
+        LiveData<Conta> contaLiveDataOrigem = this.contaRepository.buscarPeloNumero(numeroContaOrigem);
+        Conta contaOrigem = contaLiveDataOrigem.getValue();
+        LiveData<Conta> contaLiveDataDestino = this.contaRepository.buscarPeloNumero(numeroContaDestino);
+        Conta contaDestino = contaLiveDataDestino.getValue();
+
+        if (contaOrigem == null) {
+            throw new RuntimeException("Conta de origem não encontrada.");
+        }
+
+        if (contaDestino == null) {
+            throw new RuntimeException("Conta de destino não encontrada.");
+        }
+
+        if (contaOrigem.getSaldo() < valor) {
+            throw new RuntimeException("Saldo insuficiente na conta de origem.");
+        }
+
+        contaOrigem.debitar(valor);
+        contaDestino.creditar(valor);
+
+        this.contaRepository.atualizar(contaOrigem);
+        this.contaRepository.atualizar(contaDestino);
     }
 
     void creditar(String numeroConta, double valor) {
-        //TODO implementar creditar em conta (lembrar de salvar no BD o objeto Conta modificado)
+        LiveData<Conta> contaLiveData = this.contaRepository.buscarPeloNumero(numeroConta);
+        Conta conta = contaLiveData.getValue();
+
+        if (conta == null) {
+            throw new RuntimeException("Conta não encontrada.");
+        }
+
+        conta.creditar(valor);
+        this.contaRepository.atualizar(conta);
     }
 
     void debitar(String numeroConta, double valor) {
-        //TODO implementar debitar em conta (lembrar de salvar no BD o objeto Conta modificado)
+        LiveData<Conta> contaLiveData = this.contaRepository.buscarPeloNumero(numeroConta);
+        Conta conta = contaLiveData.getValue();
+
+        if (conta == null) {
+            throw new RuntimeException("Conta não encontrada.");
+        }
+
+        if (conta.getSaldo() < valor) {
+            throw new RuntimeException("Saldo insuficiente na conta.");
+        }
+
+        conta.debitar(valor);
+        this.contaRepository.atualizar(conta);
     }
 
-    void buscarPeloNome(String nomeCliente) {
-        //TODO implementar busca pelo nome do Cliente
+    List<Conta> buscarPeloNome(String nomeCliente) {
+        return this.contaRepository.buscarPeloNome(nomeCliente);
     }
 
-    void buscarPeloCPF(String cpfCliente) {
-        //TODO implementar busca pelo CPF do Cliente
+    List<Conta> buscarPeloCPF(String cpfCliente) {
+        return this.contaRepository.buscarPeloCPF(cpfCliente);
     }
 
-    void buscarPeloNumero(String numeroConta) {
-        //TODO implementar busca pelo número da Conta
+    Conta buscarPeloNumero(String numeroConta) {
+        LiveData<Conta> contaLiveData = this.contaRepository.buscarPeloNumero(numeroConta);
+        Conta conta = contaLiveData.getValue();
+        return conta;
     }
 
+    public LiveData<Double> getTotalDinheiroBanco() {
+        return totalDinheiroBanco;
+    }
 }

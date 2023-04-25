@@ -35,4 +35,8 @@ public class Conta {
     public void debitar(double valor) {
         saldo = saldo - valor;
     }
+
+    public double getSaldo() {
+        return saldo;
+    }
 }

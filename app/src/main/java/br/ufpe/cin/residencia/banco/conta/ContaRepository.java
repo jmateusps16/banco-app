@@ -9,14 +9,20 @@ import java.util.List;
 public class ContaRepository {
     private ContaDAO dao;
     private LiveData<List<Conta>> contas;
+    private LiveData<Double> totalDinheiro;
 
     public ContaRepository(ContaDAO dao) {
         this.dao = dao;
         this.contas = dao.contas();
+        this.totalDinheiro = dao.getTotalDinheiro();
     }
 
     public LiveData<List<Conta>> getContas() {
         return contas;
+    }
+
+    public LiveData<Double> getTotalDinheiroBanco() {
+        return totalDinheiro;
     }
 
     @WorkerThread
@@ -35,13 +41,17 @@ public class ContaRepository {
     }
 
     @WorkerThread
-    public LiveData<List<Conta>> buscarPeloNome(String nomeCliente) {
-        return dao.buscarPorNomeCliente("%" + nomeCliente + "%");
+    public List<Conta> buscarPeloNome(String nomeCliente) {
+        LiveData<List<Conta>> contasLiveData = dao.buscarPorNomeCliente("%" + nomeCliente + "%");
+        List<Conta> contas = contasLiveData.getValue();
+        return contas;
     }
 
     @WorkerThread
-    public LiveData<List<Conta>> buscarPeloCPF(String cpfCliente) {
-        return dao.buscarPorCpfCliente(cpfCliente);
+    public List<Conta> buscarPeloCPF(String cpfCliente) {
+        LiveData<List<Conta>> contasCpfLiveData = dao.buscarPorCpfCliente(cpfCliente);
+        List<Conta> contas = contasCpfLiveData.getValue();
+        return contas;
     }
 
     @WorkerThread

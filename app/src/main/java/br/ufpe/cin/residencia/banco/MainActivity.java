@@ -15,12 +15,14 @@ import br.ufpe.cin.residencia.banco.conta.ContasActivity;
 
 //Ver anotações TODO no código
 public class MainActivity extends AppCompatActivity {
-    BancoViewModel viewModel;
+    private BancoViewModel viewModel;
+    private TextView totalBanco;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         viewModel = new ViewModelProvider(this).get(BancoViewModel.class);
 
         Button contas = findViewById(R.id.btnContas);
@@ -29,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         Button debitar = findViewById(R.id.btnDebitar);
         Button creditar = findViewById(R.id.btnCreditar);
         Button pesquisar = findViewById(R.id.btnPesquisar);
-        TextView totalBanco = findViewById(R.id.totalDinheiroBanco);
+        totalBanco = findViewById(R.id.totalDinheiroBanco);
 
         //Remover a linha abaixo se for implementar a parte de Clientes
         clientes.setEnabled(false);
@@ -52,6 +54,11 @@ public class MainActivity extends AppCompatActivity {
         pesquisar.setOnClickListener(
                 v -> startActivity(new Intent(this, PesquisarActivity.class))
         );
+
+        // atualiza o valor total de dinheiro armazenado no banco
+        viewModel.getTotalDinheiroBanco().observe(this, total -> {
+            NumberFormat formatter = NumberFormat.getCurrencyInstance();
+            totalBanco.setText(formatter.format(total));
+        });
     }
-    //TODO Neste arquivo ainda falta a atualização automática do valor total de dinheiro armazenado no banco
 }
