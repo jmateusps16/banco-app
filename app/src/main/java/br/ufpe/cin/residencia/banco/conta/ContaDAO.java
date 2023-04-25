@@ -52,7 +52,6 @@ public interface ContaDAO {
     @Query("SELECT * FROM contas WHERE cpfCliente = :cpfDoCliente ORDER BY numero ASC")
     LiveData<List<Conta>> buscarContasPorCPFCliente(String cpfDoCliente);
 
+    @Query("SELECT * FROM contas WHERE numero LIKE :numeroConta OR nomeCliente LIKE :nomeTitular OR cpfCliente LIKE :cpfTitular")
+    public LiveData<List<Conta>> buscar(String numeroConta, String nomeTitular, String cpfTitular);
 }
-//Ver anotações TODO no código
-//TODO incluir métodos para atualizar conta e remover conta
-//TODO incluir métodos para buscar pelo (1) número da conta, (2) pelo nome e (3) pelo CPF do Cliente

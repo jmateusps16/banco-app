@@ -7,15 +7,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import br.ufpe.cin.residencia.banco.conta.ContaAdapter;
 
-//Ver anotações TODO no código
 public class PesquisarActivity extends AppCompatActivity {
     BancoViewModel viewModel;
     ContaAdapter adapter;
@@ -27,6 +28,7 @@ public class PesquisarActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(BancoViewModel.class);
         EditText aPesquisar = findViewById(R.id.pesquisa);
         Button btnPesquisar = findViewById(R.id.btn_Pesquisar);
+        Button btnLimpar = findViewById(R.id.btn_Limpar);
         RadioGroup tipoPesquisa = findViewById(R.id.tipoPesquisa);
         RecyclerView rvResultado = findViewById(R.id.rvResultado);
         adapter = new ContaAdapter(getLayoutInflater());
@@ -36,12 +38,34 @@ public class PesquisarActivity extends AppCompatActivity {
         btnPesquisar.setOnClickListener(
                 v -> {
                     String oQueFoiDigitado = aPesquisar.getText().toString();
-                    //TODO implementar a busca de acordo com o tipo de busca escolhido pelo usuário
+                    switch (tipoPesquisa.getCheckedRadioButtonId()) {
+                        case R.id.peloNumeroConta:
+                            viewModel.buscarPeloNumero(oQueFoiDigitado).observe(this, conta -> {
+                                adapter.setContas(Collections.singletonList(conta));
+                            });
+                            break;
+                        case R.id.peloNomeCliente:
+                            viewModel.buscarPeloNome(oQueFoiDigitado).observe(this, contas -> {
+                                adapter.setContas(contas);
+                            });
+                            break;
+                        case R.id.peloCPFcliente:
+                            viewModel.buscarPeloCPF(oQueFoiDigitado).observe(this, contas -> {
+                                adapter.setContas(contas);
+                            });
+                            break;
+                        default:
+                            break;
+                    }
                 }
         );
 
-        //TODO atualizar o RecyclerView com resultados da busca na medida que encontrar
-
-
+        btnLimpar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                aPesquisar.setText("");
+                adapter.setContas(new ArrayList<>());
+            }
+        });
     }
 }

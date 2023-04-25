@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 import br.ufpe.cin.residencia.banco.R;
 
-//Ver anotações TODO no código
 public class AdicionarContaActivity extends AppCompatActivity {
 
     ContaViewModel viewModel;

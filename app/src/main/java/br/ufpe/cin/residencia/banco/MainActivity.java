@@ -13,7 +13,6 @@ import java.text.NumberFormat;
 import br.ufpe.cin.residencia.banco.cliente.ClientesActivity;
 import br.ufpe.cin.residencia.banco.conta.ContasActivity;
 
-//Ver anotações TODO no código
 public class MainActivity extends AppCompatActivity {
     private BancoViewModel viewModel;
     private TextView totalBanco;

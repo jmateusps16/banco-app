@@ -17,7 +17,6 @@ import java.util.concurrent.Executors;
 import br.ufpe.cin.residencia.banco.conta.Conta;
 import br.ufpe.cin.residencia.banco.conta.ContaRepository;
 
-//Ver anotações TODO no código
 public class BancoViewModel extends AndroidViewModel {
     private ContaRepository contaRepository;
     private LiveData<Double> totalDinheiroBanco;
@@ -89,19 +88,27 @@ public class BancoViewModel extends AndroidViewModel {
         });
     }
 
-    List<Conta> buscarPeloNome(String nomeCliente) {
+    LiveData<List<Conta>> buscarPeloNome(String nomeCliente) {
         return this.contaRepository.buscarPeloNome(nomeCliente);
     }
 
-    List<Conta> buscarPeloCPF(String cpfCliente) {
+    LiveData<List<Conta>> buscarPeloCPF(String cpfCliente) {
         return this.contaRepository.buscarPeloCPF(cpfCliente);
     }
 
-    Conta buscarPeloNumero(String numeroConta) {
-        LiveData<Conta> contaLiveData = this.contaRepository.buscarPeloNumero(numeroConta);
-        Conta conta = contaLiveData.getValue();
-        return conta;
+    LiveData<Conta> buscarPeloNumero(String numeroConta) {
+        return this.contaRepository.buscarPeloNumero(numeroConta);
     }
+
+    public LiveData<List<Conta>> buscar(String numeroConta, String nomeTitular, String cpfTitular) {
+        String[] args = new String[3];
+        args[0] = "%" + numeroConta + "%";
+        args[1] = "%" + nomeTitular + "%";
+        args[2] = "%" + cpfTitular + "%";
+        LiveData<List<Conta>> contas = this.contaRepository.buscar(args[0], args[1], args[2]);
+        return contas;
+    }
+
 
     public LiveData<Double> getTotalDinheiroBanco() {
         return totalDinheiroBanco;

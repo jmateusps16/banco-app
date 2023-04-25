@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/DEV/Projetos/AndroidStudioProjects/Banco/app/src/main/res/layout/activity_pesquisar.xml" value="0.18541666666666667" />
         <entry key="app/src/main/res/layout/activity_adicionar_cliente.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_adicionar_conta.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_clientes.xml" value="0.1" />

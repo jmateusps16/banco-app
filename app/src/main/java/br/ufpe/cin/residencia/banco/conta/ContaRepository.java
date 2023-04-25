@@ -43,20 +43,15 @@ public class ContaRepository {
     }
 
     @WorkerThread
-    public List<Conta> buscarPeloNome(String nomeCliente) {
-        LiveData<List<Conta>> contasLiveData = dao.buscarPorNomeCliente("%" + nomeCliente + "%");
-        List<Conta> contas = contasLiveData.getValue();
-        return contas;
+    public LiveData<List<Conta>> buscarPeloNome(String nomeCliente) {
+        return dao.buscarPorNomeCliente("%" + nomeCliente + "%");
     }
 
     @WorkerThread
-    public List<Conta> buscarPeloCPF(String cpfCliente) {
-        LiveData<List<Conta>> contasCpfLiveData = dao.buscarPorCpfCliente(cpfCliente);
-        List<Conta> contas = contasCpfLiveData.getValue();
-        return contas;
+    public LiveData<List<Conta>> buscarPeloCPF(String cpfCliente) {
+        return dao.buscarPorCpfCliente(cpfCliente);
     }
 
-    //@WorkerThread
     public LiveData<Conta> buscarPeloNumero(String numeroConta) {
         return Transformations.switchMap(dao.buscarPorNumero(numeroConta), conta -> {
             if (conta == null) {
@@ -73,4 +68,7 @@ public class ContaRepository {
         return dao.buscarPeloNumeroSync(numeroConta);
     }
 
+    public LiveData<List<Conta>> buscar(String numeroConta, String nomeTitular, String cpfTitular) {
+        return dao.buscar("%" + numeroConta + "%", "%" + nomeTitular + "%", "%" + cpfTitular + "%");
+    }
 }

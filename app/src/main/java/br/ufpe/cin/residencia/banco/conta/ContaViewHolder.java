@@ -15,7 +15,6 @@ import java.text.NumberFormat;
 
 import br.ufpe.cin.residencia.banco.R;
 
-//Ver anotações TODO no código
 public class ContaViewHolder  extends RecyclerView.ViewHolder {
     TextView nomeCliente;
     TextView infoConta;
@@ -31,7 +30,6 @@ public class ContaViewHolder  extends RecyclerView.ViewHolder {
     void bindTo(Conta c) {
         this.nomeCliente.setText(c.nomeCliente);
         this.infoConta.setText(c.numero + " | " + "Saldo atual: R$" + NumberFormat.getCurrencyInstance().format(c.saldo));
-        //TODO Falta atualizar a imagem de acordo com o valor do saldo atual
         this.addListener(c.numero);
     }
 

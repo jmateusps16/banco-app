@@ -11,7 +11,6 @@ import java.util.List;
 
 import br.ufpe.cin.residencia.banco.BancoDB;
 
-//Ver métodos anotados com TODO
 public class ContaViewModel extends AndroidViewModel {
 
     final ContaRepository repository;
@@ -36,12 +35,6 @@ public class ContaViewModel extends AndroidViewModel {
     void remover(Conta c) {
         new Thread(() -> repository.remover(c)).start();
     }
-
-//    void buscarPeloNumero(String numeroConta) {
-//        repository.buscarPeloNumero(numeroConta).observeForever(conta -> {
-//            _contaAtual.setValue(conta);
-//        });
-//    }
 
     public LiveData<Conta> getContaAtual() {
         return _contaAtual;
