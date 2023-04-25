@@ -17,9 +17,9 @@ import br.ufpe.cin.residencia.banco.R;
 
 //Ver anotações TODO no código
 public class ContaViewHolder  extends RecyclerView.ViewHolder {
-    TextView nomeCliente = null;
-    TextView infoConta = null;
-    ImageView icone = null;
+    TextView nomeCliente;
+    TextView infoConta;
+    ImageView icone;
 
     public ContaViewHolder(@NonNull View linha) {
         super(linha);
@@ -40,7 +40,7 @@ public class ContaViewHolder  extends RecyclerView.ViewHolder {
                 v -> {
                     Context c = this.itemView.getContext();
                     Intent i = new Intent(c, EditarContaActivity.class);
-                    //TODO Está especificando a Activity mas não está passando o número da conta pelo Intent
+                    i.putExtra(KEY_NUMERO_CONTA, numeroConta);
                     c.startActivity(i);
                 }
         );

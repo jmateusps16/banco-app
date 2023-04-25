@@ -4,9 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import br.ufpe.cin.residencia.banco.R;
 
@@ -31,17 +33,26 @@ public class AdicionarContaActivity extends AppCompatActivity {
         btnAtualizar.setText("Inserir");
         btnRemover.setVisibility(View.GONE);
 
-        btnAtualizar.setOnClickListener(
-                v -> {
-                    String nomeCliente = campoNome.getText().toString();
-                    String cpfCliente = campoCPF.getText().toString();
-                    String numeroConta = campoNumero.getText().toString();
-                    String saldoConta = campoSaldo.getText().toString();
-                    //TODO: Incluir validações aqui, antes de criar um objeto Conta (por exemplo, verificar que digitou um nome com pelo menos 5 caracteres, que o campo de saldo tem de fato um número, assim por diante). Se todas as validações passarem, aí sim cria a Conta conforme linha abaixo.
-                    Conta c = new Conta(numeroConta, Double.valueOf(saldoConta), nomeCliente, cpfCliente);
-                    //TODO: chamar o método que vai salvar a conta no Banco de Dados
-                }
-        );
+        btnAtualizar.setOnClickListener(v -> {
+            String nomeCliente = campoNome.getText().toString();
+            String cpfCliente = campoCPF.getText().toString();
+            String numeroConta = campoNumero.getText().toString();
+            String saldoConta = campoSaldo.getText().toString();
 
+            if (nomeCliente.isEmpty() || cpfCliente.isEmpty() || numeroConta.isEmpty() || saldoConta.isEmpty()) {
+                Toast.makeText(this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (!TextUtils.isDigitsOnly(numeroConta)) {
+                campoNumero.setError("Número da conta inválido");
+                return;
+            }
+
+            Conta c = new Conta(numeroConta, Double.valueOf(saldoConta), nomeCliente, cpfCliente);
+            viewModel.inserir(c);
+            Toast.makeText(this, "Conta criada com sucesso!", Toast.LENGTH_SHORT).show();
+            finish();
+        });
     }
 }

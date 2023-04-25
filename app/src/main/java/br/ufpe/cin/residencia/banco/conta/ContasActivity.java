@@ -2,6 +2,7 @@ package br.ufpe.cin.residencia.banco.conta;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,10 +15,9 @@ import java.util.List;
 
 import br.ufpe.cin.residencia.banco.R;
 
-//Ver anotações TODO no código
 public class ContasActivity extends AppCompatActivity {
-    ContaAdapter adapter;
-    ContaViewModel viewModel;
+    private ContaAdapter adapter;
+    private ContaViewModel viewModel;
     private LiveData<List<Conta>> contas;
 
     @Override
@@ -35,6 +35,9 @@ public class ContasActivity extends AppCompatActivity {
         adicionarConta.setOnClickListener(
                 v -> startActivity(new Intent(this, AdicionarContaActivity.class))
         );
+
+        contas.observe(this, contas -> {
+            adapter.setContas(contas);
+        });
     }
-    //TODO Neste arquivo ainda falta implementar o código que atualiza a lista de contas automaticamente na tela
 }
