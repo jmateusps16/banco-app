@@ -56,30 +56,37 @@ public class BancoViewModel extends AndroidViewModel {
 
     void creditar(String numeroConta, double valor) {
         LiveData<Conta> contaLiveData = this.contaRepository.buscarPeloNumero(numeroConta);
-        Conta conta = contaLiveData.getValue();
-
-        if (conta == null) {
-            throw new RuntimeException("Conta não encontrada.");
-        }
-
-        conta.creditar(valor);
-        this.contaRepository.atualizar(conta);
+        contaLiveData.observeForever(new Observer<Conta>() {
+            @Override
+            public void onChanged(Conta conta) {
+                if (conta == null) {
+                    throw new RuntimeException("Conta não encontrada.");
+                }
+                conta.creditar(valor);
+                contaLiveData.removeObserver(this);
+                new Thread(() -> contaRepository.atualizar(conta)).start();
+            }
+        });
     }
 
     void debitar(String numeroConta, double valor) {
         LiveData<Conta> contaLiveData = this.contaRepository.buscarPeloNumero(numeroConta);
-        Conta conta = contaLiveData.getValue();
+        contaLiveData.observeForever(new Observer<Conta>() {
+            @Override
+            public void onChanged(Conta conta) {
+                if (conta == null) {
+                    throw new RuntimeException("Conta não encontrada.");
+                }
 
-        if (conta == null) {
-            throw new RuntimeException("Conta não encontrada.");
-        }
+                if (conta.getSaldo() < valor) {
+                    throw new RuntimeException("Saldo insuficiente na conta.");
+                }
 
-        if (conta.getSaldo() < valor) {
-            throw new RuntimeException("Saldo insuficiente na conta.");
-        }
-
-        conta.debitar(valor);
-        this.contaRepository.atualizar(conta);
+                conta.debitar(valor);
+                contaLiveData.removeObserver(this);
+                new Thread(() -> contaRepository.atualizar(conta)).start();
+            }
+        });
     }
 
     List<Conta> buscarPeloNome(String nomeCliente) {
