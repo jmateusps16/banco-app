@@ -39,7 +39,7 @@ public class TransferirActivity extends AppCompatActivity {
                     viewModel.getMensagemToast().observe(this, event -> {
                         String mensagem = event.getContentIfNotHandled();
                         if (mensagem != null) {
-                            Toast.makeText(getApplicationContext(), mensagem, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), mensagem, Toast.LENGTH_LONG).show();
                         }
                     });
                     finish();
