@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class TransferirActivity extends AppCompatActivity {
 
@@ -35,9 +36,16 @@ public class TransferirActivity extends AppCompatActivity {
                     String numDestino = numeroContaDestino.getText().toString();
                     double valor = Double.valueOf(valorOperacao.getText().toString());
                     viewModel.transferir(numOrigem, numDestino, valor);
+                    viewModel.getMensagemToast().observe(this, event -> {
+                        String mensagem = event.getContentIfNotHandled();
+                        if (mensagem != null) {
+                            Toast.makeText(getApplicationContext(), mensagem, Toast.LENGTH_SHORT).show();
+                        }
+                    });
                     finish();
                 }
         );
+
 
     }
 }

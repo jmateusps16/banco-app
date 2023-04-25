@@ -1,7 +1,9 @@
 package br.ufpe.cin.residencia.banco;
 
 import android.app.Application;
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -20,6 +22,7 @@ import br.ufpe.cin.residencia.banco.conta.ContaRepository;
 public class BancoViewModel extends AndroidViewModel {
     private ContaRepository contaRepository;
     private LiveData<Double> totalDinheiroBanco;
+    private MutableLiveData<Event<String>> mensagemToast = new MutableLiveData<>();
 
     public BancoViewModel(@NonNull Application application) {
         super(application);
@@ -33,11 +36,13 @@ public class BancoViewModel extends AndroidViewModel {
         executor.execute(() -> {
             Conta contaOrigem = contaRepository.buscarPeloNumeroSync(numeroContaOrigem);
             if (contaOrigem == null) {
-                throw new RuntimeException("Conta de origem não encontrada.");
+                exibirToast("Conta de origem não encontrada.");
+                return;
             }
 
             if (contaOrigem.getSaldo() < valor) {
-                throw new RuntimeException("Saldo insuficiente na conta de origem.");
+                exibirToast("Saldo insuficiente na conta de origem.");
+                return;
             }
 
             contaOrigem.debitar(valor);
@@ -45,11 +50,14 @@ public class BancoViewModel extends AndroidViewModel {
 
             Conta contaDestino = contaRepository.buscarPeloNumeroSync(numeroContaDestino);
             if (contaDestino == null) {
-                throw new RuntimeException("Conta de destino não encontrada.");
+                exibirToast("Conta de destino não encontrada.");
+                return;
             }
 
             contaDestino.creditar(valor);
             contaRepository.atualizar(contaDestino);
+
+            exibirToast("Transferência realizada com sucesso!");
         });
     }
 
@@ -59,11 +67,13 @@ public class BancoViewModel extends AndroidViewModel {
             @Override
             public void onChanged(Conta conta) {
                 if (conta == null) {
-                    throw new RuntimeException("Conta não encontrada.");
+                    exibirToast("Conta não encontrada.");
+                    return;
                 }
                 conta.creditar(valor);
                 contaLiveData.removeObserver(this);
                 new Thread(() -> contaRepository.atualizar(conta)).start();
+                exibirToast("Valor Creditado com Sucesso.");
             }
         });
     }
@@ -74,16 +84,19 @@ public class BancoViewModel extends AndroidViewModel {
             @Override
             public void onChanged(Conta conta) {
                 if (conta == null) {
-                    throw new RuntimeException("Conta não encontrada.");
+                    exibirToast("Conta não encontrada.");
+                    return;
                 }
 
                 if (conta.getSaldo() < valor) {
-                    throw new RuntimeException("Saldo insuficiente na conta.");
+                    exibirToast("Saldo insuficiente na conta.");
+                    return;
                 }
 
                 conta.debitar(valor);
                 contaLiveData.removeObserver(this);
                 new Thread(() -> contaRepository.atualizar(conta)).start();
+                exibirToast("Valor Debitado com Sucesso.");
             }
         });
     }
@@ -106,6 +119,9 @@ public class BancoViewModel extends AndroidViewModel {
         args[1] = "%" + nomeTitular + "%";
         args[2] = "%" + cpfTitular + "%";
         LiveData<List<Conta>> contas = this.contaRepository.buscar(args[0], args[1], args[2]);
+        if (contas == null) {
+            exibirToast("Conta não encontrada.");
+        }
         return contas;
     }
 
@@ -113,4 +129,13 @@ public class BancoViewModel extends AndroidViewModel {
     public LiveData<Double> getTotalDinheiroBanco() {
         return totalDinheiroBanco;
     }
+
+    private void exibirToast(String mensagem) {
+        mensagemToast.postValue(new Event<>(mensagem));
+    }
+
+    public LiveData<Event<String>> getMensagemToast() {
+        return mensagemToast;
+    }
+
 }
