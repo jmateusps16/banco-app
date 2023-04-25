@@ -3,7 +3,6 @@ package br.ufpe.cin.residencia.banco.conta;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.WorkerThread;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -15,9 +14,9 @@ import br.ufpe.cin.residencia.banco.BancoDB;
 //Ver métodos anotados com TODO
 public class ContaViewModel extends AndroidViewModel {
 
-    private ContaRepository repository;
+    final ContaRepository repository;
     public LiveData<List<Conta>> contas;
-    private MutableLiveData<Conta> _contaAtual = new MutableLiveData<>();
+    final MutableLiveData<Conta> _contaAtual = new MutableLiveData<>();
     public LiveData<Conta> contaAtual = _contaAtual;
 
     public ContaViewModel(@NonNull Application application) {
@@ -31,15 +30,21 @@ public class ContaViewModel extends AndroidViewModel {
     }
 
     void atualizar(Conta c) {
-        //TODO implementar
+        new Thread(() -> repository.atualizar(c)).start();
     }
 
     void remover(Conta c) {
-        //TODO implementar
+        new Thread(() -> repository.remover(c)).start();
     }
 
-    void buscarPeloNumero(String numeroConta) {
-        //TODO implementar
+//    void buscarPeloNumero(String numeroConta) {
+//        repository.buscarPeloNumero(numeroConta).observeForever(conta -> {
+//            _contaAtual.setValue(conta);
+//        });
+//    }
+
+    public LiveData<Conta> getContaAtual() {
+        return _contaAtual;
     }
 
     public LiveData<List<Conta>> getContas() {

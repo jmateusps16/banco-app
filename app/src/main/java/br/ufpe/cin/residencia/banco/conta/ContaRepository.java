@@ -26,29 +26,26 @@ public class ContaRepository {
 
     @WorkerThread
     public void atualizar(Conta c) {
-        //TODO implementar atualizar
+        dao.atualizar(c);
     }
 
     @WorkerThread
     public void remover(Conta c) {
-        //TODO implementar remover
+        dao.remover(c);
     }
 
     @WorkerThread
-    public List<Conta> buscarPeloNome(String nomeCliente) {
-        //TODO implementar busca
-        return null;
+    public LiveData<List<Conta>> buscarPeloNome(String nomeCliente) {
+        return dao.buscarPorNomeCliente("%" + nomeCliente + "%");
     }
 
     @WorkerThread
-    public List<Conta> buscarPeloCPF(String cpfCliente) {
-        //TODO implementar busca
-        return null;
+    public LiveData<List<Conta>> buscarPeloCPF(String cpfCliente) {
+        return dao.buscarPorCpfCliente(cpfCliente);
     }
 
     @WorkerThread
-    public Conta buscarPeloNumero(String numeroConta) {
-        //TODO implementar busca
-        return null;
+    public LiveData<Conta> buscarPeloNumero(String numeroConta) {
+        return dao.buscarPorNumero(numeroConta);
     }
 }
