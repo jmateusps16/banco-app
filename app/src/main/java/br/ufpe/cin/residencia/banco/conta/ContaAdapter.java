@@ -7,10 +7,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 
+import java.util.List;
+
 import br.ufpe.cin.residencia.banco.R;
 //ESTA CLASSE NAO PRECISA SER MODIFICADA!
 public class ContaAdapter extends ListAdapter<Conta, ContaViewHolder> {
-    LayoutInflater inflater;
+    private LayoutInflater inflater;
+    private List<Conta> contas;
 
     public ContaAdapter(LayoutInflater layoutInflater) {
         super(DIFF_CALLBACK);
@@ -43,4 +46,9 @@ public class ContaAdapter extends ListAdapter<Conta, ContaViewHolder> {
                             oldItem.saldo == newItem.saldo;
                 }
             };
+
+    public void setContas(List<Conta> contas) {
+        this.contas = contas;
+        submitList(contas);
+    }
 }

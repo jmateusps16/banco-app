@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Banco</string>
+    <string name="info_conta"> %1$s | Saldo atual: %2$s </string>
 </resources>
