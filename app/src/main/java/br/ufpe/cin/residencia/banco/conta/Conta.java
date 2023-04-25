@@ -39,4 +39,33 @@ public class Conta {
     public double getSaldo() {
         return saldo;
     }
+
+    public String getNomeCliente() {
+        return nomeCliente;
+    }
+
+    public String getNumero() {
+        return numero;
+    }
+
+    public String getCpfCliente() {
+        return cpfCliente;
+    }
+
+    public void setSaldo(double saldo) {
+        this.saldo = saldo;
+    }
+
+    public void setNomeCliente(String nomeCliente) {
+        this.nomeCliente = nomeCliente;
+    }
+
+    public void setNumero(String numero) {
+        this.numero = numero;
+    }
+
+    public void setCpfCliente(String cpfCliente) {
+        this.cpfCliente = cpfCliente;
+    }
+
 }

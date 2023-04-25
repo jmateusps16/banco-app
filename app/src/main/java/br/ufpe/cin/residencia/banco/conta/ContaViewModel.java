@@ -44,4 +44,8 @@ public class ContaViewModel extends AndroidViewModel {
         return contas;
     }
 
+    public LiveData<Conta> getContaPorNumero(String numero) {
+        return repository.buscarPeloNumero(numero);
+    }
+
 }
