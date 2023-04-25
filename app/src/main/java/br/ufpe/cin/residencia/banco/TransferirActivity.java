@@ -42,7 +42,6 @@ public class TransferirActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), mensagem, Toast.LENGTH_LONG).show();
                         }
                     });
-                    finish();
                 }
         );
 
