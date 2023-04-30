@@ -53,5 +53,5 @@ public interface ContaDAO {
     LiveData<List<Conta>> buscarContasPorCPFCliente(String cpfDoCliente);
 
     @Query("SELECT * FROM contas WHERE numero LIKE :numeroConta OR nomeCliente LIKE :nomeTitular OR cpfCliente LIKE :cpfTitular")
-    public LiveData<List<Conta>> buscar(String numeroConta, String nomeTitular, String cpfTitular);
+    LiveData<List<Conta>> buscar(String numeroConta, String nomeTitular, String cpfTitular);
 }

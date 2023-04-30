@@ -8,9 +8,9 @@ import androidx.lifecycle.Transformations;
 import java.util.List;
 
 public class ContaRepository {
-    private ContaDAO dao;
-    private LiveData<List<Conta>> contas;
-    private LiveData<Double> totalDinheiro;
+    private final ContaDAO dao;
+    private final LiveData<List<Conta>> contas;
+    private final LiveData<Double> totalDinheiro;
 
     public ContaRepository(ContaDAO dao) {
         this.dao = dao;

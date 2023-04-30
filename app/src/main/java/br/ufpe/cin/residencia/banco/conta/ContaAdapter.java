@@ -12,7 +12,7 @@ import java.util.List;
 import br.ufpe.cin.residencia.banco.R;
 //ESTA CLASSE NAO PRECISA SER MODIFICADA!
 public class ContaAdapter extends ListAdapter<Conta, ContaViewHolder> {
-    private LayoutInflater inflater;
+    private final LayoutInflater inflater;
     private List<Conta> contas;
 
     public ContaAdapter(LayoutInflater layoutInflater) {

@@ -20,9 +20,9 @@ import br.ufpe.cin.residencia.banco.conta.Conta;
 import br.ufpe.cin.residencia.banco.conta.ContaRepository;
 
 public class BancoViewModel extends AndroidViewModel {
-    private ContaRepository contaRepository;
-    private LiveData<Double> totalDinheiroBanco;
-    private MutableLiveData<Event<String>> mensagemToast = new MutableLiveData<>();
+    private final ContaRepository contaRepository;
+    private final LiveData<Double> totalDinheiroBanco;
+    private final MutableLiveData<Event<String>> mensagemToast = new MutableLiveData<>();
 
     public BancoViewModel(@NonNull Application application) {
         super(application);
