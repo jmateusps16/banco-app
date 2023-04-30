@@ -56,8 +56,14 @@ public class MainActivity extends AppCompatActivity {
 
         // atualiza o valor total de dinheiro armazenado no banco
         viewModel.getTotalDinheiroBanco().observe(this, total -> {
-            NumberFormat formatter = NumberFormat.getCurrencyInstance();
-            totalBanco.setText(formatter.format(total));
+            if (total instanceof Number) { // verifica se o total é um número
+                NumberFormat formatter = NumberFormat.getCurrencyInstance();
+                totalBanco.setText(formatter.format(total));
+            } else {
+                //Se não tiver valores, vai mostrar 0
+                NumberFormat formatter = NumberFormat.getCurrencyInstance();
+                totalBanco.setText(formatter.format(0));
+            }
         });
     }
 }

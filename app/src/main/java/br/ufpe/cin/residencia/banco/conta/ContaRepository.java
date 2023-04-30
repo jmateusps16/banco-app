@@ -7,7 +7,6 @@ import androidx.lifecycle.Transformations;
 
 import java.util.List;
 
-//Ver anotações TODO no código
 public class ContaRepository {
     private ContaDAO dao;
     private LiveData<List<Conta>> contas;
